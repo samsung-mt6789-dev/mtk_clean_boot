@@ -31,7 +31,7 @@ Using Magisk, accept "SuperUser Request"
 List the *block device* partitions
 
 ```shell-session
-$ a14xm:/ # ls -al /dev/block/by-name
+ls -al /dev/block/by-name
 ```
 Look for the entry similar to `up_param -> /dev/block/sdxY`. This is the partition we're interested in
 
@@ -63,7 +63,7 @@ Decompress the `up_param.img` file to reveal a list of images
 ![extractimg](src/extraction.png)
 
 ```bash
-user@ubuntu:~/Downloads/up$ tar xvf up_param.img 
+tar xvf up_param.img 
 
 ```
 
@@ -86,7 +86,7 @@ After editing, repack the modified images into back into a *tar* archive
 ![repack](src/repack.png)
 
 ```bash
-user@ubuntu:~/Downloads/up_param$ tar -cvf up_param.tar *.jpg 
+tar -cvf up_param.tar *.jpg 
 
 ```
 Linux uses the `mv` command to rename, from `up_param.tar` to `up_param.img`
@@ -94,7 +94,7 @@ Linux uses the `mv` command to rename, from `up_param.tar` to `up_param.img`
 ![rename](src/rename.png)
 
 ```bash
-user@ubuntu:~/Downloads/up_param$ mv up_param.tar up_param.img
+mv up_param.tar up_param.img
 
 ```
 

@@ -1,14 +1,15 @@
 # Suppressing Bootloader Warnings on Samsung (Mediatek) Devices
 
 To preface, the following information pertains to and is performed on our Galaxy A14 5G
-The device runs the *MT6833* SoC, the Samsung *MT6833* family are the following devices:
+The device runs the *MT6789* SoC, the Samsung *Helio G99* family are the following devices:
 
-- Galaxy M13 5G
-- Galaxy A13 5G
-- Galaxy A22 5G
-- Galaxy F42 5G
+- Galaxy Tab A9 
+- Galaxy Tab A9 WiFi
+- Galaxy A15 5G
+- Galaxy A16 5G
+- Galaxy A24 5G
 
-If you follow the steps below, I would *still* recommend verifying the location of the `up_param` partition. But overall, the [up_param](https://github.com/a14xm-dev/mtk_clean_boot/releases/tag/a14xm) will be safe to flash to those devices.
+If you follow the steps below, I would *still* recommend verifying the location of the `up_param` partition. But overall, the [up_param](https://github.com/samsung-mt6789-dev/mtk_clean_boot/releases/tag/up_param) will be safe to flash to those devices.
 
 ---
 **Identify the Bootloader "Logo" Partition**
@@ -18,15 +19,11 @@ Connect the device to your computer and open terminal or command prompt.
 
 Enter an adb shell:
 
-![shell](src/adbshell.png)
-
 Access device shell with *elevated* priveleges
 
-![alt text](src/su.png)
+    Use 'su' for Magisk or 'kp' for KernelPatch/APatch
 
-Using Magisk, accept "SuperUser Request"
-
-![SURequest](src/superuserrequest.png)
+If Using Magisk, accept "SuperUser Request"
 
 List the *block device* partitions
 
@@ -70,15 +67,16 @@ tar xvf up_param.img
 The archive contents are decompressed in the *up_param/* directory
 
 We want to edit the `booting_warning.jpg` and `svb_orange.jpg`
-   - Use any image editor of your choice to modify these images. I used GIMP to fill `booting_warning.jpg` over the initial warning message 
    
 ![alt text](src/originalbootwarn.jpg)
 
-With GIMP *Fill* Tool: make sure to move the `tolerance` slider to maximum value. In order to completely fill the image black.
+After testing it is safe to remove `booting_warning.jpg` entirely, without affecting the startup process and splash logos from booting
    
-Since `svb_orange.jpg` is originally in 936x1800 aspect ratio, it doesn't match full screen resolution. 
+Since `svb_orange.jpg` is originally in 936x1800 aspect ratio, it doesn't match full screen resolution.
 
-To fix the modified `svb_orange.jpg` from appearing "too small" upon boot, You can copy out the `logo.jpg` and rename and overwrite to `svb_orange.jpg`
+![svb_orange](svb_orange.jpg)
+
+To fix the `svb_orange.jpg` from appearing "too small" upon boot, instead of having to modify the image itself you can just copy out the `logo.jpg` to rename and overwrite that to `svb_orange.jpg`
 
 **Repack and Replace the Partition Image**
 After editing, repack the modified images into back into a *tar* archive 
@@ -109,6 +107,6 @@ Enter back into an *root* adb shell
 ![final step](src/writebackmodified.png)
 
 ```shell-session
-dd if=/sdcard/up_param.img of=/dev/block/sdc40
+dd if=/sdcard/up_param.img of=/dev/block/by-name/up_param
 ```
 Reboot, and voila. 

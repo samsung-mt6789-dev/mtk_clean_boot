@@ -33,12 +33,10 @@ ls -al /dev/block/by-name
 Look for the entry similar to `up_param -> /dev/block/sdxY`. This is the partition we're interested in
 
 This is our entry:
-![list-partitions](src/lspartition~2.png)
 
 **Backup the Original Partition**
 To copy out the original `up_param` partition, run:
-     
-![pullorigparam](src/copyoriginal.png)
+
      ```
      dd if=/dev/block/sdc40 of=/sdcard/up_param.img
      ```
@@ -55,9 +53,7 @@ mkdir -p ~/Downloads/up_param && mv up_param.img ~/Downloads/up_param
 
 
 **Decompress and Edit the Images**
-Decompress the `up_param.img` file to reveal a list of images 
-
-![extractimg](src/extraction.png)
+Decompress the `up_param.img` file to reveal a list of images
 
 ```bash
 tar xvf up_param.img 
@@ -81,15 +77,12 @@ To fix the `svb_orange.jpg` from appearing "too small" upon boot, instead of hav
 **Repack and Replace the Partition Image**
 After editing, repack the modified images into back into a *tar* archive 
 
-![repack](src/repack.png)
-
 ```bash
 tar -cvf up_param.tar *.jpg 
 
 ```
 Linux uses the `mv` command to rename, from `up_param.tar` to `up_param.img`
 
-![rename](src/rename.png)
 
 ```bash
 mv up_param.tar up_param.img
@@ -98,13 +91,10 @@ mv up_param.tar up_param.img
 
 Place the modified `up_param.img` back into the `/sdcard` directory on your device. Where we first copied out the original `up_param.img`
 
-![alt text](src/modifiedparam.png)
-
 **Restore the Modified Image**
 Enter back into an *root* adb shell
 - Write the modified image back to the original partition
- 
-![final step](src/writebackmodified.png)
+
 
 ```shell-session
 dd if=/sdcard/up_param.img of=/dev/block/by-name/up_param
